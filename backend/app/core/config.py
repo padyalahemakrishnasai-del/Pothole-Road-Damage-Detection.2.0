@@ -34,7 +34,12 @@ class Settings(BaseSettings):
     OUTPUT_DIR: str = str(Path(__file__).resolve().parent.parent.parent / "outputs")
     
     # CORS
-    CORS_ORIGINS: list[str] = ["http://localhost:5173", "http://localhost:3000"]
+    CORS_ORIGINS: list[str] = [
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://*.onrender.com",
+        "*",  # Allow all origins in production (frontend is served from same origin)
+    ]
 
 
 settings = Settings()

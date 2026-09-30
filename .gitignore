@@ -29,7 +29,6 @@ env/
 *.sqlite3
 
 # ML Models & Data
-*.pt
 *.pth
 *.onnx
 *.weights
@@ -38,6 +37,9 @@ ml/dataset/
 ml/runs/
 ml/weights/
 ml/temp_dataset/
+# Allow base YOLO models needed for deployment
+!backend/yolov8n.pt
+!ml/yolo11n.pt
 
 # Uploads & Outputs
 backend/uploads/*
@@ -47,7 +49,6 @@ backend/outputs/*
 
 # Node
 node_modules/
-frontend/dist/
 
 # OS
 .DS_Store
