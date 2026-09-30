@@ -1,0 +1,34 @@
+# Training hyperparameters
+# These are reasonable defaults for a student project with limited GPU time.
+
+# Model
+model: yolo11n.pt  # Nano model for faster training; use yolo11s.pt or yolo11m.pt for better accuracy
+
+# Training
+epochs: 50
+batch_size: 16
+image_size: 640
+patience: 10  # Early stopping patience
+
+# Learning rate
+lr0: 0.01  # Initial learning rate
+lrf: 0.01  # Final learning rate (lr0 * lrf)
+
+# Augmentation
+augment: true
+mosaic: 1.0
+mixup: 0.0
+hsv_h: 0.015
+hsv_s: 0.7
+hsv_v: 0.4
+
+# Inference
+confidence_threshold: 0.25
+iou_threshold: 0.45
+
+# Device
+device: ""  # Empty string = auto-detect (CUDA if available, else CPU)
+
+# Output
+project: runs/train
+name: road_damage

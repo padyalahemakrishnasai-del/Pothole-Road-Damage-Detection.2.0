@@ -1,0 +1,27 @@
+# YOLO Training Configuration for Road Damage Detection
+# Dataset: RDD2022 (Road Damage Detection Dataset)
+#
+# Class mapping:
+#   D00 -> Longitudinal Crack
+#   D10 -> Transverse Crack
+#   D20 -> Alligator Crack
+#   D40 -> Pothole
+#   D43 -> Surface Damage (cross-walk blur / white-line blur, mapped to Surface Damage)
+#   D44 -> Surface Damage (additional surface damage type)
+
+# Dataset paths (relative to this config file location)
+path: ../dataset
+train: images/train
+val: images/val
+test: images/test
+
+# Number of classes
+nc: 5
+
+# Class names (mapped from RDD2022 to understandable categories)
+names:
+  0: Pothole
+  1: Longitudinal Crack
+  2: Transverse Crack
+  3: Alligator Crack
+  4: Surface Damage
