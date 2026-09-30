@@ -8,33 +8,68 @@ React 19 + Vite frontend for the **Pothole & Road Damage Detection** system. Pro
 
 | Tool | Version |
 |------|---------|
+| Python | 3.10 or later |
 | Node.js | 18 or later |
 | npm | 9 or later |
 
 ---
 
-## Getting Started
+## Quick Start — Run the Full App
 
-### 1. Install Dependencies
+Open **two terminals** from the repository root (`road-damage-detection/`):
+
+### Terminal 1 — Backend (FastAPI)
+
+```bash
+cd backend
+
+# Create and activate virtual environment (first time only)
+python -m venv venv
+venv\Scripts\activate            # Windows
+# source venv/bin/activate       # macOS / Linux
+
+# Install Python dependencies (first time only)
+pip install -r requirements.txt
+
+# Start the API server
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+```
+
+Backend API: **http://127.0.0.1:8000**
+Swagger docs: **http://127.0.0.1:8000/docs**
+
+### Terminal 2 — Frontend (React + Vite)
 
 ```bash
 cd frontend
+
+# Install Node dependencies (first time only)
 npm install
-```
 
-### 2. Start the Development Server
-
-```bash
+# Start the dev server
 npm run dev
 ```
 
-The app will be available at **http://localhost:5173**
+Frontend app: **http://localhost:5173**
 
-> **Note:** The backend API must be running at `http://127.0.0.1:8000` for analysis, dashboard, and report features to work. See the [backend README](../backend/) or the [root README](../README.md) for setup instructions.
+> **Important:** The backend must be running before using the frontend. Analysis, dashboard, history, and report features all call the backend API at `http://127.0.0.1:8000`.
 
 ---
 
-## Available Scripts
+## Backend API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/health` | Health check |
+| `POST` | `/api/analysis/image` | Upload an image for road damage analysis |
+| `POST` | `/api/analysis/video` | Upload a video for frame-by-frame analysis |
+| `GET` | `/api/dashboard/stats` | Aggregate analytics (totals, distributions) |
+| `GET` | `/api/dashboard/history` | List past inspection records |
+| `GET` | `/api/analysis/{id}/report` | Download PDF inspection report |
+
+---
+
+## Frontend Scripts
 
 | Command | Description |
 |---------|-------------|
@@ -45,39 +80,25 @@ The app will be available at **http://localhost:5173**
 
 ---
 
-## Running Against the Backend
+## Running Tests
 
-1. Start the FastAPI backend first:
+```bash
+cd backend
+python -m pytest
+```
 
-   ```bash
-   # From the repository root
-   cd backend
-   python -m venv venv
-   venv\Scripts\activate        # Windows
-   # source venv/bin/activate   # macOS / Linux
-   pip install -r requirements.txt
-   python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
-   ```
-
-2. Then start the frontend:
-
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-
-3. Open **http://localhost:5173** in your browser.
+All 14 tests cover API routes, detector service, report generation, and video processing.
 
 ---
 
 ## Production Build
 
 ```bash
+cd frontend
 npm run build
 ```
 
-Output is placed in `frontend/dist/`. You can serve it with any static host or preview it locally:
+Output is placed in `frontend/dist/`. Preview it locally:
 
 ```bash
 npm run preview
@@ -87,6 +108,15 @@ npm run preview
 
 ## Tech Stack
 
+### Backend
+- **FastAPI** — async REST API framework
+- **Ultralytics YOLO** — real-time object detection (PyTorch)
+- **OpenCV** — image/video annotation rendering
+- **SQLAlchemy** — ORM with SQLite database
+- **ReportLab** — PDF report generation
+- **Pydantic V2** — request/response validation
+
+### Frontend
 - **React 19** — UI framework
 - **Vite 5** — Build tool & dev server
 - **React Router v7** — Client-side routing
@@ -101,26 +131,43 @@ npm run preview
 ## Project Structure
 
 ```
-frontend/
-├── public/
-├── src/
-│   ├── components/          # Shared layout & navigation components
-│   ├── pages/
-│   │   ├── HomePage.jsx         # Landing page
-│   │   ├── AnalyzePage.jsx      # Image / video upload & results
-│   │   ├── DashboardPage.jsx    # Aggregate analytics
-│   │   ├── HistoryPage.jsx      # Past inspections list
-│   │   └── AnalysisDetailPage.jsx  # Individual result view
-│   ├── services/
-│   │   └── api.js           # Axios API wrapper (base URL, helpers)
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css            # Custom CSS design system
-├── package.json
-├── vite.config.js
-└── README.md
+road-damage-detection/
+├── backend/
+│   ├── app/
+│   │   ├── api/             # API routes (health, analysis, dashboard)
+│   │   ├── core/            # App settings and environment config
+│   │   ├── database/        # SQLAlchemy session & ORM models
+│   │   ├── models/          # Pydantic request/response schemas
+│   │   ├── services/        # detector, video_processor, report_generator
+│   │   └── utils/           # File validation & storage helpers
+│   ├── outputs/             # Annotated images, videos, and PDFs
+│   ├── tests/               # 14 pytest unit & integration tests
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── components/      # Shared layout & navigation components
+│   │   ├── pages/
+│   │   │   ├── HomePage.jsx
+│   │   │   ├── AnalyzePage.jsx
+│   │   │   ├── DashboardPage.jsx
+│   │   │   ├── HistoryPage.jsx
+│   │   │   └── AnalysisDetailPage.jsx
+│   │   ├── services/
+│   │   │   └── api.js       # Axios API wrapper
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   └── index.css        # Custom CSS design system
+│   ├── package.json
+│   └── vite.config.js
+├── ml/
+│   ├── configs/             # YOLO dataset & training configs
+│   ├── train.py             # Model training pipeline
+│   ├── evaluate.py          # Validation metrics reporting
+│   └── prepare_dataset.py   # Dataset extraction & split script
+├── README.md
+└── progress.md
 ```
 
 ---
 
-For full project documentation including ML training and backend API reference, see the [root README](../README.md).
+For the full project overview and ML training instructions, see the [root README](../README.md).
