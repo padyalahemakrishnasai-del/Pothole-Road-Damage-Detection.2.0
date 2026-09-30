@@ -33,9 +33,11 @@ env/
 *.pth
 *.onnx
 *.weights
+*.zip
 ml/dataset/
 ml/runs/
 ml/weights/
+ml/temp_dataset/
 
 # Uploads & Outputs
 backend/uploads/*

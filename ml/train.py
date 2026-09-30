@@ -41,32 +41,32 @@ def load_yaml(file_path: str) -> dict:
 def main():
     args = parse_args()
     print("=" * 60)
-    print("🚀 Road Damage Detection — YOLO Training Pipeline")
+    print("Road Damage Detection -- YOLO Training Pipeline")
     print("=" * 60)
 
     cfg = load_yaml(args.config) if os.path.exists(args.config) else {}
 
     model_name = cfg.get("model", "yolov8n.pt")
-    epochs = args.epochs or cfg.get("epochs", 50)
+    epochs = args.epochs or cfg.get("epochs", 15)
     batch = args.batch or cfg.get("batch_size", 16)
-    imgsz = args.imgsz or cfg.get("image_size", 640)
+    imgsz = args.imgsz or cfg.get("image_size", 480)
     device = args.device or cfg.get("device", "")
 
-    print(f"📦 Base Model: {model_name}")
-    print(f"📊 Dataset Config: {args.data}")
-    print(f"⚙️  Epochs: {epochs} | Batch: {batch} | ImgSz: {imgsz}")
-    print(f"💻 Device: {device or 'auto'}")
+    print(f"Base Model: {model_name}")
+    print(f"Dataset Config: {args.data}")
+    print(f"Epochs: {epochs} | Batch: {batch} | ImgSz: {imgsz}")
+    print(f"Device: {device or 'auto'}")
     print("-" * 60)
 
     if not os.path.exists(args.data):
-        print(f"❌ Error: Dataset config not found at '{args.data}'")
+        print(f"Error: Dataset config not found at '{args.data}'")
         sys.exit(1)
 
     # Initialize YOLO model
     model = YOLO(model_name)
 
     # Train
-    print("⏳ Starting model training...")
+    print("Starting model training...")
     results = model.train(
         data=args.data,
         epochs=epochs,
@@ -91,9 +91,9 @@ def main():
             target_dir.mkdir(parents=True, exist_ok=True)
             target_path = target_dir / "best.pt"
             shutil.copy(best_pt, target_path)
-            print(f"✅ Successfully exported best model weights to: {target_path}")
+            print(f"Successfully exported best model weights to: {target_path}")
 
-    print("🎉 Training finished.")
+    print("Training finished successfully.")
 
 
 if __name__ == "__main__":

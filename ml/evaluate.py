@@ -31,22 +31,22 @@ def parse_args():
 def main():
     args = parse_args()
     print("=" * 60)
-    print("📈 Road Damage Detection — Model Evaluation")
+    print("Road Damage Detection -- Model Evaluation")
     print("=" * 60)
 
     if not os.path.exists(args.weights):
-        print(f"⚠️  Weights file '{args.weights}' not found.")
+        print(f"Warning: Weights file '{args.weights}' not found.")
         print("Note: To evaluate, train the model first or place weights at ml/weights/best.pt.")
         sys.exit(1)
 
     if not os.path.exists(args.data):
-        print(f"❌ Error: Dataset config not found at '{args.data}'")
+        print(f"Error: Dataset config not found at '{args.data}'")
         sys.exit(1)
 
-    print(f"📦 Loading weights: {args.weights}")
+    print(f"Loading weights: {args.weights}")
     model = YOLO(args.weights)
 
-    print("⏳ Running validation...")
+    print("Running validation...")
     metrics = model.val(
         data=args.data,
         imgsz=args.imgsz,
@@ -56,7 +56,7 @@ def main():
     )
 
     print("-" * 60)
-    print("🏆 Overall Metrics:")
+    print("Overall Metrics:")
     print(f"   mAP50:     {metrics.box.map50:.4f}")
     print(f"   mAP50-95:  {metrics.box.map:.4f}")
     print(f"   Precision: {metrics.box.mp:.4f}")
